@@ -19,8 +19,7 @@ export class CoffeesController {
 
   @Get()
   findAll(@Query() paginationQuery) {
-    // const { limit, offset } = paginationQuery;
-    return this.coffeesService.findAll();
+    return this.coffeesService.findAll(paginationQuery);
   }
 
   @Get()
@@ -39,11 +38,16 @@ export class CoffeesController {
     return this.coffeesService.create(createCoffeeDto);
   }
 
-  @Put(':id')
+  @Patch(':id/recommend')
+  async recommendCoffee(@Param('id') id: string) {
+    const coffeeToRecommend = await this.coffeesService.findOne(id);
+    return this.coffeesService.recommendCoffee(coffeeToRecommend);
+  }
+
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(id, updateCoffeeDto);
   }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.coffeesService.remove(id);
