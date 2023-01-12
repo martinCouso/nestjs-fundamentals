@@ -14,7 +14,13 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Public } from '../common/decorators/public.decorator';
 import { ParseIntPipe } from '../common/pipes/parse-int/parse-int.pipe';
 import { ProtocolDecorator } from '../common/decorators/protocol.decorator';
+import {
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
@@ -30,6 +36,8 @@ export class CoffeesController {
     return this.coffeesService.findAll(paginationQuery);
   }
 
+  @ApiInternalServerErrorResponse({ description: 'Server Error' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: string) {
     console.log('id', id);

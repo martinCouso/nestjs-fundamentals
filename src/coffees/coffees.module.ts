@@ -15,6 +15,5 @@ import coffeesConfig from './coffees.config';
   ],
   controllers: [CoffeesController],
   providers: [CoffeesService],
-  exports: [CoffeesService],
 })
 export class CoffeesModule {}
