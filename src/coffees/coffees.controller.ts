@@ -7,29 +7,32 @@ import {
   Patch,
   Post,
   Query,
-  Put,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Public } from '../common/decorators/public.decorator';
+import { ParseIntPipe } from '../common/pipes/parse-int/parse-int.pipe';
+import { ProtocolDecorator } from '../common/decorators/protocol.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
   @Get()
-  findAll(@Query() paginationQuery) {
+  @Public()
+  async findAll(
+    @ProtocolDecorator('https') protocol,
+    @Query() paginationQuery,
+  ) {
+    //await new Promise((resolve) => setTimeout(resolve, 4000));
+    console.log('protocol', protocol);
     return this.coffeesService.findAll(paginationQuery);
   }
 
-  @Get()
-  findAllCopy(@Query() paginationQuery) {
-    // const { limit, offset } = paginationQuery;
-    return `this.coffeesService.findAll();`;
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
+    console.log('id', id);
     return this.coffeesService.findOne(id);
   }
 
